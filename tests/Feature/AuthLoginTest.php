@@ -146,4 +146,20 @@ class AuthLoginTest extends TestCase
         $response->assertSee('Template Pesan');
         $response->assertSee('Atur Target Penerima');
     }
+
+    public function test_authenticated_user_can_open_wa_business_targeted_create_page(): void
+    {
+        $user = new User([
+            'name' => 'Ads Operator',
+            'email' => 'operator@myads.test',
+            'password' => 'password',
+        ]);
+
+        $response = $this->actingAs($user)->get('/campaign/wa-business/targeted?view=create');
+
+        $response->assertOk();
+        $response->assertSee('Buat Iklan WA Business Targeted');
+        $response->assertSee('Template Pesan');
+        $response->assertSee('Atur Profil Penerima');
+    }
 }

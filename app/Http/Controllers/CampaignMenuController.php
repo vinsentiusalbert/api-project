@@ -6,6 +6,7 @@ use App\Models\CampaignTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Throwable;
 
 class CampaignMenuController extends Controller
 {
@@ -22,10 +23,68 @@ class CampaignMenuController extends Controller
         }
 
         if ($channel === 'wa-business' && $menu === 'location-based-area') {
-            return view('campaign-wa-lba', [
+            $rows = collect($this->campaignRows($channel, $menu));
+            $view = $request->query('view');
+
+            if ($view === 'create') {
+                return view('campaign-wa-lba.create', [
+                    'channel' => $channel,
+                    'menu' => $menu,
+                    'page' => $page,
+                    'waTemplates' => $this->resolveWaTemplates(),
+                ]);
+            }
+
+            if ($view === 'show') {
+                $campaignRow = $rows->firstWhere('id', (string) $request->query('id')) ?? $rows->first();
+
+                return view('campaign-wa-lba.show', [
+                    'channel' => $channel,
+                    'menu' => $menu,
+                    'page' => $page,
+                    'campaignRow' => $campaignRow,
+                    'waTemplates' => $this->resolveWaTemplates(),
+                ]);
+            }
+
+            return view('campaign-wa-lba.index', [
                 'channel' => $channel,
                 'menu' => $menu,
                 'page' => $page,
+                'campaignRows' => $rows,
+            ]);
+        }
+
+        if ($channel === 'wa-business' && $menu === 'targeted') {
+            $rows = collect($this->campaignRows($channel, $menu));
+            $view = $request->query('view');
+
+            if ($view === 'create') {
+                return view('campaign-wa-targeted.create', [
+                    'channel' => $channel,
+                    'menu' => $menu,
+                    'page' => $page,
+                    'waTemplates' => $this->resolveWaTemplates(),
+                ]);
+            }
+
+            if ($view === 'show') {
+                $campaignRow = $rows->firstWhere('id', (string) $request->query('id')) ?? $rows->first();
+
+                return view('campaign-wa-targeted.show', [
+                    'channel' => $channel,
+                    'menu' => $menu,
+                    'page' => $page,
+                    'campaignRow' => $campaignRow,
+                    'waTemplates' => $this->resolveWaTemplates(),
+                ]);
+            }
+
+            return view('campaign-wa-targeted.index', [
+                'channel' => $channel,
+                'menu' => $menu,
+                'page' => $page,
+                'campaignRows' => $rows,
             ]);
         }
 
@@ -184,6 +243,88 @@ class CampaignMenuController extends Controller
             'page' => $this->pages()['wa-business']['campaign-template'],
             'templateRow' => $template,
         ]);
+    }
+
+    private function resolveWaTemplates()
+    {
+        try {
+            return CampaignTemplate::query()
+                ->latest()
+                ->get()
+                ->map(function (CampaignTemplate $template): array {
+                    return $this->mapWaTemplate($template);
+                })
+                ->values();
+        } catch (Throwable) {
+            return collect($this->fallbackWaTemplates());
+        }
+    }
+
+    private function mapWaTemplate(CampaignTemplate $template): array
+    {
+        $body = trim((string) $template->body);
+        $lines = preg_split('/\r\n|\r|\n/', $body) ?: [];
+        $headline = trim((string) ($lines[0] ?? 'Template pesan WA Business'));
+        $message = trim(implode("\n\n", array_slice($lines, 1))) ?: $body;
+        $assetUrl = $template->asset_path ? asset('storage/' . $template->asset_path) : asset('assets/logo.png');
+        $isCarousel = $template->template_type === 'carousel_cards' || str_contains(strtolower((string) $template->category), 'carousel');
+
+        return [
+            'id' => (string) $template->id,
+            'name' => $template->name,
+            'account_name' => 'Telkomsel Promo & Rewards',
+            'template_kind' => ucfirst(str_replace('_', ' ', (string) $template->template_type)),
+            'channel_kind' => $isCarousel ? 'Carousel' : 'Basic',
+            'bubble_headline' => $headline,
+            'bubble_message' => $message,
+            'asset_url' => $assetUrl,
+            'cards' => $isCarousel
+                ? [
+                    ['title' => 'Card 1', 'caption' => 'Slide utama campaign WA Business'],
+                    ['title' => 'Card 2', 'caption' => 'Slide lanjutan untuk menampilkan informasi tambahan'],
+                ]
+                : [],
+            'price_note' => 'Template yang dipilih menggunakan Display Name Default, sehingga akan dikenakan biaya sebesar Rp 1.100 per pesan.',
+            'cta' => data_get($template->buttons, '0.label', 'Coba Sekarang'),
+            'preview_name' => 'Name',
+        ];
+    }
+
+    private function fallbackWaTemplates(): array
+    {
+        return [
+            [
+                'id' => 'fallback-1',
+                'name' => 'sehatdanbugarmyads',
+                'account_name' => 'Telkomsel Promo & Rewards',
+                'template_kind' => 'Basic',
+                'channel_kind' => 'Carousel',
+                'bubble_headline' => 'Semangat pagi, sobat sehat! 👋 ☀️',
+                'bubble_message' => 'Di tengah ramainya suasana CFD, jangan lewatkan kesempatan untuk menjangkau pelanggan yang tepat untuk bisnis Anda.',
+                'asset_url' => asset('assets/logo.png'),
+                'cards' => [
+                    ['title' => 'Card 1', 'caption' => 'Slide utama campaign WA Business'],
+                    ['title' => 'Card 2', 'caption' => 'Slide lanjutan untuk menampilkan informasi tambahan'],
+                ],
+                'price_note' => 'Template yang dipilih menggunakan Display Name Default, sehingga akan dikenakan biaya sebesar Rp 1.100 per pesan.',
+                'cta' => 'Coba Sekarang',
+                'preview_name' => 'Name',
+            ],
+            [
+                'id' => 'fallback-2',
+                'name' => 'promolokalmingguan',
+                'account_name' => 'Telkomsel Promo & Rewards',
+                'template_kind' => 'Simple message',
+                'channel_kind' => 'Basic',
+                'bubble_headline' => 'Promo spesial akhir pekan untuk pelanggan sekitar toko!',
+                'bubble_message' => 'Jangkau pelanggan di sekitar area bisnis Anda dengan penawaran yang relevan dan langsung mengundang aksi.',
+                'asset_url' => asset('assets/logo.png'),
+                'cards' => [],
+                'price_note' => 'Template yang dipilih menggunakan Display Name Default, sehingga akan dikenakan biaya sebesar Rp 1.100 per pesan.',
+                'cta' => 'Lihat Promo',
+                'preview_name' => 'Name',
+            ],
+        ];
     }
 
     private function campaignRows(string $channel, string $menu): array

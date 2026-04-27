@@ -2463,19 +2463,265 @@ a {
 }
 
 .campaign-form-actions--wa-lba {
-    margin-top: 112px;
+    margin-top: 36px;
     padding-top: 28px;
     border-top: 1px solid #dde7e2;
+}
+
+.campaign-wa-lba-step--selected .campaign-form-actions--wa-lba {
+    margin-top: 112px;
 }
 
 .campaign-wa-lba-step {
     display: grid;
     gap: 10px;
-    min-height: 280px;
+    min-height: 0;
 }
 
 .campaign-wa-lba-step__field {
     max-width: 780px;
+}
+
+.campaign-wa-lba-step__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) 420px;
+    gap: 34px;
+    align-items: start;
+}
+
+.campaign-wa-lba-step__main {
+    display: grid;
+    gap: 22px;
+}
+
+.campaign-wa-lba-template {
+    display: grid;
+    gap: 22px;
+}
+
+.campaign-wa-lba-template__note {
+    margin: 0;
+    color: #253843;
+    line-height: 1.7;
+}
+
+.campaign-wa-lba-template__meta {
+    display: grid;
+    gap: 18px;
+}
+
+.campaign-wa-lba-template__meta span,
+.campaign-wa-lba-template__body span,
+.campaign-wa-lba-template__cards > span {
+    display: block;
+    color: #5f7570;
+    font-size: 0.95rem;
+}
+
+.campaign-wa-lba-template__meta strong,
+.campaign-wa-lba-template__body strong {
+    display: block;
+    margin-top: 4px;
+    color: #0a274b;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.campaign-wa-lba-template__body {
+    display: grid;
+    gap: 10px;
+}
+
+.campaign-wa-lba-template__body p {
+    margin: 0;
+    color: #0a274b;
+    font-size: 1rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+}
+
+.campaign-wa-lba-template__accordion {
+    margin-top: 10px;
+    border-top: 1px solid #d9e2dd;
+}
+
+.campaign-wa-lba-template__card-item {
+    border-bottom: 1px solid #d9e2dd;
+}
+
+.campaign-wa-lba-template__card-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 0;
+    border: 0;
+    background: transparent;
+    color: #0a274b;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 800;
+    text-align: left;
+    cursor: pointer;
+}
+
+.campaign-wa-lba-template__card-panel {
+    padding: 0 0 18px;
+}
+
+.campaign-wa-lba-template__card-panel p {
+    margin: 0;
+    color: #5c6f7a;
+    line-height: 1.65;
+}
+
+.campaign-wa-lba-preview {
+    display: flex;
+    justify-content: center;
+}
+
+.campaign-wa-lba-preview__phone {
+    width: 100%;
+    max-width: 430px;
+    border-radius: 42px;
+    overflow: hidden;
+    background: #f8ede2;
+    box-shadow: inset 0 0 0 10px #ffffff, 0 24px 46px rgba(15, 23, 42, 0.12);
+}
+
+.campaign-wa-lba-preview__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 18px 12px;
+    background: #0b8f72;
+    color: #ffffff;
+}
+
+.campaign-wa-lba-preview__profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto;
+}
+
+.campaign-wa-lba-preview__avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    background: #e8ecef;
+    flex: 0 0 38px;
+}
+
+.campaign-wa-lba-preview__profile strong,
+.campaign-wa-lba-preview__profile span {
+    display: block;
+}
+
+.campaign-wa-lba-preview__profile strong {
+    font-size: 0.98rem;
+}
+
+.campaign-wa-lba-preview__profile span {
+    font-size: 0.72rem;
+    opacity: 0.9;
+}
+
+.campaign-wa-lba-preview__chat {
+    display: grid;
+    gap: 10px;
+    padding: 16px;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
+        radial-gradient(circle at 20% 20%, rgba(19, 157, 123, 0.08), transparent 30%),
+        #f6efe8;
+}
+
+.campaign-wa-lba-preview__bubble {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #0a274b;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.campaign-wa-lba-preview__bubble strong {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+.campaign-wa-lba-preview__bubble p {
+    margin: 10px 0 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.campaign-wa-lba-preview__carousel {
+    overflow: hidden;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.campaign-wa-lba-preview__carousel img {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.campaign-wa-lba-preview__carousel-copy {
+    padding: 14px 16px 18px;
+    color: #0a274b;
+}
+
+.campaign-wa-lba-preview__brand {
+    display: block;
+    color: #ff1f3d;
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+.campaign-wa-lba-preview__carousel-copy strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 1.05rem;
+    line-height: 1.2;
+}
+
+.campaign-wa-lba-preview__carousel-copy p {
+    margin: 8px 0 0;
+    color: #4f6470;
+    font-size: 0.88rem;
+    line-height: 1.55;
+}
+
+.campaign-wa-lba-preview__action {
+    padding: 14px 16px 18px;
+    border-radius: 0 0 18px 18px;
+    background: #ffffff;
+    color: #0c7fe7;
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.campaign-wa-lba-preview__phone--basic .campaign-wa-lba-preview__carousel {
+    display: none;
+}
+
+.campaign-wa-lba-preview__phone--basic .campaign-wa-lba-preview__bubble {
+    padding-bottom: 18px;
+}
+
+.campaign-wa-lba-preview__phone--carousel .campaign-wa-lba-preview__bubble {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 .campaign-step-nav-btn {
@@ -4964,7 +5210,28 @@ body.campaign-map-open {
         min-height: 0;
     }
 
+    .campaign-wa-lba-step__layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .campaign-wa-lba-template__meta {
+        grid-template-columns: 1fr;
+    }
+
+    .campaign-wa-lba-preview__phone {
+        max-width: 100%;
+    }
+
+    .campaign-wa-lba-preview__carousel img {
+        height: 180px;
+    }
+
     .campaign-form-actions--wa-lba {
+        margin-top: 36px;
+    }
+
+    .campaign-wa-lba-step--selected .campaign-form-actions--wa-lba {
         margin-top: 72px;
     }
 
@@ -5269,6 +5536,21 @@ body.campaign-map-open {
 
     .campaign-compose-card__section-title {
         font-size: 1.25rem;
+    }
+
+    .campaign-wa-lba-template__body p,
+    .campaign-wa-lba-preview__bubble p {
+        font-size: 0.92rem;
+    }
+
+    .campaign-wa-lba-preview__topbar,
+    .campaign-wa-lba-preview__chat {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .campaign-wa-lba-preview__carousel img {
+        height: 150px;
     }
 
     .campaign-form-actions--wa-lba {
