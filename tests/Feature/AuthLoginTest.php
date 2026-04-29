@@ -142,9 +142,9 @@ class AuthLoginTest extends TestCase
         $response = $this->actingAs($user)->get('/campaign/wa-business/location-based-area');
 
         $response->assertOk();
-        $response->assertSee('Buat Iklan WA Business LBA');
-        $response->assertSee('Template Pesan');
-        $response->assertSee('Atur Target Penerima');
+        $response->assertSee('WA Business Location Based Area');
+        $response->assertSee('ID Iklan');
+        $response->assertSee('Judul Pesan Iklan');
     }
 
     public function test_authenticated_user_can_open_wa_business_targeted_create_page(): void

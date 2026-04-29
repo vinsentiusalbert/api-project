@@ -670,28 +670,6 @@
                                 </div>
                             </div>
                             <div class="campaign-cost-card__section">
-                                <span class="campaign-cost-card__section-title">Saldo & Paket Anda</span>
-                                <div class="campaign-cost-card__row">
-                                    <span>Gunakan Paket?</span>
-                                    <strong class="campaign-cost-card__warning">(Tersisa 0 Pesan)</strong>
-                                </div>
-                                <div class="campaign-cost-card__row">
-                                    <span>Saldo Umum</span>
-                                    <strong>Rp 2.443.005</strong>
-                                </div>
-                                <div class="campaign-cost-card__row">
-                                    <span>Saldo Monetary</span>
-                                    <strong>Rp 3.968.100</strong>
-                                </div>
-                                <div class="campaign-cost-card__row">
-                                    <span>Gunakan Saldo Monetary?</span>
-                                    <label class="campaign-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="campaign-switch__slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="campaign-cost-card__section">
                                 <span class="campaign-cost-card__section-title">Pembayaran Anda Menggunakan</span>
                                 <div class="campaign-cost-card__row">
                                     <span>Saldo Umum</span>

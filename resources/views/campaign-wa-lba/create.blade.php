@@ -549,17 +549,6 @@
                                 </div>
                             </div>
                             <div class="campaign-cost-card__section">
-                                <span class="campaign-cost-card__section-title">Saldo & Paket Anda</span>
-                                <div class="campaign-cost-card__row">
-                                    <span>Gunakan Paket?</span>
-                                    <strong class="campaign-cost-card__warning">(Tersisa 1757 Pesan)</strong>
-                                </div>
-                                <div class="campaign-cost-card__row">
-                                    <span>Saldo Umum</span>
-                                    <strong>Rp 2.443.005</strong>
-                                </div>
-                            </div>
-                            <div class="campaign-cost-card__section">
                                 <span class="campaign-cost-card__section-title">Pembayaran Anda Menggunakan</span>
                                 <div class="campaign-cost-card__row">
                                     <span>Saldo Umum</span>
