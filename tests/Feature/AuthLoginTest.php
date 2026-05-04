@@ -115,6 +115,23 @@ class AuthLoginTest extends TestCase
         $response->assertSee('Atur Pengiriman');
     }
 
+    public function test_authenticated_user_can_open_sms_location_based_area_show_page(): void
+    {
+        $user = new User([
+            'name' => 'Ads Operator',
+            'email' => 'operator@myads.test',
+            'password' => 'password',
+        ]);
+
+        $response = $this->actingAs($user)->get('/campaign/sms/location-based-area?view=show&id=1642248');
+
+        $response->assertOk();
+        $response->assertSee('Detail Iklan');
+        $response->assertSee('Location Based Advertising - SMS');
+        $response->assertSee('Pengiriman');
+        $response->assertSee('Biaya Pembayaran');
+    }
+
     public function test_authenticated_user_can_open_sms_targeted_create_page(): void
     {
         $user = new User([
@@ -145,6 +162,23 @@ class AuthLoginTest extends TestCase
         $response->assertSee('WA Business Location Based Area');
         $response->assertSee('ID Iklan');
         $response->assertSee('Judul Pesan Iklan');
+    }
+
+    public function test_authenticated_user_can_open_wa_business_location_based_area_show_page(): void
+    {
+        $user = new User([
+            'name' => 'Ads Operator',
+            'email' => 'operator@myads.test',
+            'password' => 'password',
+        ]);
+
+        $response = $this->actingAs($user)->get('/campaign/wa-business/location-based-area?view=show&id=1640146');
+
+        $response->assertOk();
+        $response->assertSee('Detail Iklan');
+        $response->assertSee('WA Business - Lba');
+        $response->assertSee('Laporan Iklan -');
+        $response->assertSee('Biaya Pembayaran');
     }
 
     public function test_authenticated_user_can_open_wa_business_targeted_create_page(): void

@@ -343,6 +343,11 @@ class CampaignMenuController extends Controller
                 ],
             ],
             'wa-business' => [
+                'location-based-area' => [
+                    ['id' => '1640146', 'date' => '19 Apr 2026', 'title' => 'Sehat dan Bugar MyAds CFD', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'LBA', 'status_detail' => 'Sukses: 8.769 Gagal: 1.231', 'total_price' => 'Rp 0'],
+                    ['id' => '1638713', 'date' => '15 Apr 2026', 'title' => 'promo pagi sekitar sudirman', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'LBA', 'status_detail' => 'Sukses: 3.220 Gagal: 114', 'total_price' => 'Rp 3.542.000'],
+                    ['id' => '1635520', 'date' => '11 Apr 2026', 'title' => 'special promo fx sudirman', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'LBA', 'status_detail' => 'Sukses: 5.108 Gagal: 88', 'total_price' => 'Rp 5.618.800'],
+                ],
                 'targeted' => [
                     ['id' => '1824401', 'date' => '25 Apr 2026', 'title' => 'promo_wa_targeted', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'WA Targeted', 'status_detail' => 'Sukses: 1.920 Gagal: 12', 'total_price' => 'Rp 210.000'],
                     ['id' => '1821220', 'date' => '21 Apr 2026', 'title' => 'blast komunitas sehat', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'WA Targeted', 'status_detail' => 'Sukses: 840 Gagal: 5', 'total_price' => 'Rp 92.400'],
