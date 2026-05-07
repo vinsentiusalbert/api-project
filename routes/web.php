@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CampaignMenuController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -19,7 +20,7 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware('auth')->group(function (): void {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/campaign/wa-business/campaign-template', [CampaignMenuController::class, 'listCampaignTemplates'])->name('campaign-template.index');
     Route::post('/campaign/wa-business/campaign-template', [CampaignMenuController::class, 'storeCampaignTemplate'])->name('campaign-template.store');
     Route::get('/campaign/wa-business/campaign-template/{template}', [CampaignMenuController::class, 'showCampaignTemplate'])->name('campaign-template.show');

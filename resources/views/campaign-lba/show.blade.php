@@ -257,7 +257,7 @@
                                 <div class="campaign-report-billing__section">
                                     <div class="campaign-report-billing__row campaign-report-billing__row--spread">
                                         <span>Grand Total <a href="#">Sembunyikan Detil</a></span>
-                                        <strong>{{ $campaignRow['total_price'] ?? 'Rp 300.000' }}</strong>
+                                        <strong>{{ $campaignRow['total_price'] ?? '-' }}</strong>
                                     </div>
                                 </div>
                                 <div class="campaign-report-billing__section">

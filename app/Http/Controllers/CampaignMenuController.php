@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CampaignTemplate;
+use App\Services\MyadsApiClient;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -23,7 +24,7 @@ class CampaignMenuController extends Controller
         }
 
         if ($channel === 'wa-business' && $menu === 'location-based-area') {
-            $rows = collect($this->campaignRows($channel, $menu));
+            $rows = collect($this->campaignRowsFromApi($request, $channel, $menu));
             $view = $request->query('view');
 
             if ($view === 'create') {
@@ -37,6 +38,7 @@ class CampaignMenuController extends Controller
 
             if ($view === 'show') {
                 $campaignRow = $rows->firstWhere('id', (string) $request->query('id')) ?? $rows->first();
+                abort_unless(is_array($campaignRow), 404);
 
                 return view('campaign-wa-lba.show', [
                     'channel' => $channel,
@@ -56,7 +58,7 @@ class CampaignMenuController extends Controller
         }
 
         if ($channel === 'wa-business' && $menu === 'targeted') {
-            $rows = collect($this->campaignRows($channel, $menu));
+            $rows = collect($this->campaignRowsFromApi($request, $channel, $menu));
             $view = $request->query('view');
 
             if ($view === 'create') {
@@ -70,6 +72,7 @@ class CampaignMenuController extends Controller
 
             if ($view === 'show') {
                 $campaignRow = $rows->firstWhere('id', (string) $request->query('id')) ?? $rows->first();
+                abort_unless(is_array($campaignRow), 404);
 
                 return view('campaign-wa-targeted.show', [
                     'channel' => $channel,
@@ -89,7 +92,7 @@ class CampaignMenuController extends Controller
         }
 
         if ($menu === 'location-based-area') {
-            $rows = collect($this->campaignRows($channel, $menu));
+            $rows = collect($this->campaignRowsFromApi($request, $channel, $menu));
             $view = $request->query('view');
 
             if ($view === 'create') {
@@ -102,6 +105,7 @@ class CampaignMenuController extends Controller
 
             if ($view === 'show') {
                 $campaignRow = $rows->firstWhere('id', (string) $request->query('id')) ?? $rows->first();
+                abort_unless(is_array($campaignRow), 404);
 
                 return view('campaign-lba.show', [
                     'channel' => $channel,
@@ -120,7 +124,7 @@ class CampaignMenuController extends Controller
         }
 
         if ($menu === 'targeted') {
-            $rows = collect($this->campaignRows($channel, $menu));
+            $rows = collect($this->campaignRowsFromApi($request, $channel, $menu));
             $view = $request->query('view');
 
             if ($view === 'create') {
@@ -133,6 +137,7 @@ class CampaignMenuController extends Controller
 
             if ($view === 'show') {
                 $campaignRow = $rows->firstWhere('id', (string) $request->query('id')) ?? $rows->first();
+                abort_unless(is_array($campaignRow), 404);
 
                 return view('campaign-targeted.show', [
                     'channel' => $channel,
@@ -256,7 +261,7 @@ class CampaignMenuController extends Controller
                 })
                 ->values();
         } catch (Throwable) {
-            return collect($this->fallbackWaTemplates());
+            return collect();
         }
     }
 
@@ -327,36 +332,110 @@ class CampaignMenuController extends Controller
         ];
     }
 
-    private function campaignRows(string $channel, string $menu): array
+    private function campaignRowsFromApi(Request $request, string $channel, string $menu): array
     {
-        $rows = [
-            'sms' => [
-                'location-based-area' => [
-                    ['id' => '1642248', 'date' => '22 Apr 2026', 'title' => 'grandhika', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Location Based Advertising', 'channel_type' => 'SMS', 'status_detail' => 'Sukses: 1.500 Gagal: 0', 'total_price' => 'Rp 300.000'],
-                    ['id' => '1640146', 'date' => '19 Apr 2026', 'title' => 'Sehat dan Bugar MyAds CFD', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Location Based Advertising', 'channel_type' => 'LBA', 'status_detail' => 'Sukses: 8.769 Gagal: 1.231', 'total_price' => 'Rp 0'],
-                    ['id' => '1638713', 'date' => '15 Apr 2026', 'title' => 'promosi mall jakarta', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Location Based Advertising', 'channel_type' => 'SMS', 'status_detail' => 'Sukses: 3 Gagal: 2', 'total_price' => 'Rp 1.815'],
-                ],
-                'targeted' => [
-                    ['id' => '1724401', 'date' => '24 Apr 2026', 'title' => 'promo_fypparfumery', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Targeted', 'channel_type' => 'SMS', 'status_detail' => 'Sukses: 25 Gagal: 24', 'total_price' => 'Rp 15.125'],
-                    ['id' => '1723304', 'date' => '18 Apr 2026', 'title' => 'test perfume', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Targeted', 'channel_type' => 'SMS', 'status_detail' => 'Sukses: 2 Gagal: 0', 'total_price' => 'Rp 1.210'],
-                    ['id' => '1719988', 'date' => '11 Apr 2026', 'title' => 'testing blast', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Targeted', 'channel_type' => 'SMS', 'status_detail' => 'Sukses: 4 Gagal: 0', 'total_price' => 'Rp 2.420'],
-                ],
-            ],
-            'wa-business' => [
-                'location-based-area' => [
-                    ['id' => '1640146', 'date' => '19 Apr 2026', 'title' => 'Sehat dan Bugar MyAds CFD', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'LBA', 'status_detail' => 'Sukses: 8.769 Gagal: 1.231', 'total_price' => 'Rp 0'],
-                    ['id' => '1638713', 'date' => '15 Apr 2026', 'title' => 'promo pagi sekitar sudirman', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'LBA', 'status_detail' => 'Sukses: 3.220 Gagal: 114', 'total_price' => 'Rp 3.542.000'],
-                    ['id' => '1635520', 'date' => '11 Apr 2026', 'title' => 'special promo fx sudirman', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'LBA', 'status_detail' => 'Sukses: 5.108 Gagal: 88', 'total_price' => 'Rp 5.618.800'],
-                ],
-                'targeted' => [
-                    ['id' => '1824401', 'date' => '25 Apr 2026', 'title' => 'promo_wa_targeted', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'WA Targeted', 'status_detail' => 'Sukses: 1.920 Gagal: 12', 'total_price' => 'Rp 210.000'],
-                    ['id' => '1821220', 'date' => '21 Apr 2026', 'title' => 'blast komunitas sehat', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'WA Targeted', 'status_detail' => 'Sukses: 840 Gagal: 5', 'total_price' => 'Rp 92.400'],
-                    ['id' => '1819032', 'date' => '17 Apr 2026', 'title' => 'promo outlet weekend', 'operator' => 'TELKOMSEL', 'category' => 'Iklan Whatsapp Business', 'channel_type' => 'WA Targeted', 'status_detail' => 'Sukses: 430 Gagal: 0', 'total_price' => 'Rp 47.300'],
-                ],
-            ],
-        ];
+        $gatewayToken = (string) $request->session()->get('myads.gw_token', '');
+        if ($gatewayToken === '') {
+            return [];
+        }
 
-        return $rows[$channel][$menu] ?? [];
+        try {
+            /** @var MyadsApiClient $client */
+            $client = app(MyadsApiClient::class);
+            $listResp = $client->campaignList($gatewayToken, ['campaignId' => null]);
+
+            $items = data_get($listResp, 'data.data.campaigns')
+                ?? data_get($listResp, 'data.data.items')
+                ?? data_get($listResp, 'data.data')
+                ?? [];
+
+            if (! is_array($items)) {
+                return [];
+            }
+
+            $wantedChannel = $channel === 'sms' ? 'SMS' : null;
+            if ($channel === 'wa-business') {
+                // Common values seen in APIs: WABA, WA, WHATSAPP
+                $wantedChannel = 'WA';
+            }
+
+            $wantedType = match ($menu) {
+                'location-based-area' => 'LBA',
+                'targeted' => 'TARGETED',
+                'broadcast' => 'BROADCAST',
+                default => null,
+            };
+
+            $filtered = array_values(array_filter($items, function ($row) use ($wantedChannel, $wantedType) {
+                if (! is_array($row)) return false;
+
+                if ($wantedChannel) {
+                    $channelValue = strtoupper((string) (data_get($row, 'channel') ?? data_get($row, 'channel_type') ?? ''));
+
+                    if ($wantedChannel === 'SMS' && $channelValue !== 'SMS') {
+                        return false;
+                    }
+
+                    if ($wantedChannel === 'WA') {
+                        $isWa = in_array($channelValue, ['WABA', 'WA', 'WA-BUSINESS', 'WHATSAPP'], true);
+                        if (! $isWa) return false;
+                    }
+                }
+
+                if ($wantedType) {
+                    $typeValue = strtoupper((string) (data_get($row, 'campaignType') ?? data_get($row, 'campaign_type') ?? data_get($row, 'type') ?? ''));
+                    if ($typeValue !== '' && ! str_contains($typeValue, $wantedType)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }));
+
+            return array_map(function ($row) {
+                $id = (string) (data_get($row, 'campaignId') ?? data_get($row, 'id') ?? '');
+                $title = (string) (data_get($row, 'campaignName') ?? data_get($row, 'title') ?? data_get($row, 'name') ?? '');
+
+                $createdAt = data_get($row, 'createdAt') ?? data_get($row, 'created_at') ?? data_get($row, 'date');
+                $dateLabel = is_string($createdAt) ? $createdAt : '';
+                if ($dateLabel !== '') {
+                    try {
+                        $dateLabel = \Carbon\Carbon::parse($dateLabel)->translatedFormat('d M Y');
+                    } catch (Throwable) {
+                        // keep original
+                    }
+                }
+
+                $channelType = (string) (data_get($row, 'channel') ?? data_get($row, 'channel_type') ?? '');
+                $category = (string) (data_get($row, 'category') ?? data_get($row, 'campaignType') ?? '');
+                $operator = (string) (data_get($row, 'operator') ?? '');
+
+                $success = data_get($row, 'success') ?? data_get($row, 'successCount') ?? data_get($row, 'success_count');
+                $failed = data_get($row, 'failed') ?? data_get($row, 'failedCount') ?? data_get($row, 'failed_count');
+                $statusDetail = '';
+                if (is_numeric($success) || is_numeric($failed)) {
+                    $statusDetail = sprintf('Sukses: %s Gagal: %s', (string) ($success ?? 0), (string) ($failed ?? 0));
+                }
+
+                $totalPrice = data_get($row, 'totalPrice') ?? data_get($row, 'total_price') ?? data_get($row, 'price');
+                $totalPriceLabel = is_numeric($totalPrice)
+                    ? 'Rp ' . number_format((float) $totalPrice, 0, ',', '.')
+                    : (is_string($totalPrice) ? $totalPrice : '');
+
+                return [
+                    'id' => $id,
+                    'date' => $dateLabel,
+                    'title' => $title,
+                    'operator' => $operator,
+                    'category' => $category,
+                    'channel_type' => $channelType,
+                    'status_detail' => $statusDetail,
+                    'total_price' => $totalPriceLabel,
+                ];
+            }, $filtered);
+        } catch (Throwable) {
+            return [];
+        }
     }
 
     private function pages(): array

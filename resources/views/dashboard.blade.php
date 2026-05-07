@@ -65,6 +65,23 @@
 @extends('layouts.portal')
 
 @section('content')
+    @php
+        $expiryLabel = '-';
+
+        if (!empty($balanceExpiry) && is_string($balanceExpiry)) {
+            try {
+                $expiryLabel = 'Exp. ' . \Carbon\Carbon::parse($balanceExpiry)->translatedFormat('d M Y');
+            } catch (Throwable) {
+                $expiryLabel = 'Exp. ' . $balanceExpiry;
+            }
+        }
+
+        $campaignTotalLabel = $campaignTotal === null ? '-' : (string) $campaignTotal;
+        $campaignSmsLabel = $campaignSmsTotal === null ? '-' : (string) $campaignSmsTotal;
+        $campaignWaLabel = $campaignWaTotal === null ? '-' : (string) $campaignWaTotal;
+        $gwStatusLabel = session()->has('myads.gw_token') ? 'OK' : '-';
+    @endphp
+
     <section class="portal-hero">
         <div class="portal-welcome">
             <p class="portal-welcome__lead">Selamat Datang,</p>
@@ -75,13 +92,13 @@
             <div class="portal-balance__top">
                 <div>
                     <p class="portal-balance__label">Saldo Utama</p>
-                    <p class="portal-balance__value">Rp 2.443.005</p>
+                    <p class="portal-balance__value">{{ $balanceFormatted ?? '-' }}</p>
                 </div>
             </div>
 
             <div class="portal-balance__bottom">
-                <span>Exp. 17 Apr 2027</span>
-                <span>Exp. 17 Apr 2027</span>
+                <span>{{ $expiryLabel }}</span>
+                <span>{{ $expiryLabel }}</span>
                 <a href="#">Lihat Riwayat Saldo</a>
             </div>
         </article>
@@ -95,20 +112,20 @@
 
         <div class="portal-stats">
             <div class="portal-stats__item">
-                <p class="portal-stats__value">3</p>
-                <p class="portal-stats__label">Menu utama tampil</p>
+                <p class="portal-stats__value">{{ $campaignTotalLabel }}</p>
+                <p class="portal-stats__label">Total campaign</p>
             </div>
             <div class="portal-stats__item">
-                <p class="portal-stats__value">4</p>
-                <p class="portal-stats__label">Submenu placeholder</p>
+                <p class="portal-stats__value">{{ $campaignSmsLabel }}</p>
+                <p class="portal-stats__label">Campaign channel SMS</p>
             </div>
             <div class="portal-stats__item">
-                <p class="portal-stats__value">Empty</p>
-                <p class="portal-stats__label">Semua isi menu campaign masih dikosongkan sementara</p>
+                <p class="portal-stats__value">{{ $campaignWaLabel }}</p>
+                <p class="portal-stats__label">Campaign channel WA Business</p>
             </div>
             <div class="portal-stats__item">
-                <p class="portal-stats__value">Ready</p>
-                <p class="portal-stats__label">Struktur navigasi sudah siap untuk diisi kembali nanti</p>
+                <p class="portal-stats__value">{{ $gwStatusLabel }}</p>
+                <p class="portal-stats__label">Token gateway di session</p>
             </div>
         </div>
     </section>
@@ -120,23 +137,23 @@
             <article class="portal-service-card">
                 <div class="portal-service-card__title-row">
                     <h3>SMS</h3>
-                    <span>kosong</span>
+                    <span>{{ $campaignSmsLabel }} campaign</span>
                 </div>
                 <div class="portal-service-list">
-                    <span class="portal-service-list__item">Location Based Area belum diisi.</span>
-                    <span class="portal-service-list__item">Targeted belum diisi.</span>
+                    <span class="portal-service-list__item">Lihat campaign SMS di menu navigasi.</span>
+                    <span class="portal-service-list__item">Gunakan token gateway untuk request list / create.</span>
                 </div>
             </article>
 
             <article class="portal-service-card">
                 <div class="portal-service-card__title-row">
                     <h3>WA Business</h3>
-                    <span>kosong</span>
+                    <span>{{ $campaignWaLabel }} campaign</span>
                 </div>
                 <div class="portal-service-list">
-                    <span class="portal-service-list__item">Location Based Area belum diisi.</span>
-                    <span class="portal-service-list__item">Campaign Template belum diisi.</span>
-                    <span class="portal-service-list__item">Targeted belum diisi.</span>
+                    <span class="portal-service-list__item">Lihat campaign WA Business di menu navigasi.</span>
+                    <span class="portal-service-list__item">Campaign Template tetap dari database UI.</span>
+                    <span class="portal-service-list__item">Data campaign list/stop/add dari API GW.</span>
                 </div>
             </article>
         </div>
